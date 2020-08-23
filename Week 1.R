@@ -77,10 +77,11 @@ sd(smb_19991231)
 summary(smb_19991231)
 hist(smb_19991231)
 
-#TASK5
+#TASK 5
 #Regression of the data 
-reg <- lm(factor.returns$mkt.rf ~ factor.returns$smb + factor.returns$hml + factor.returns$rf, 
-          data=filter(factor.returns, "date" >20000000))
+reg <- lm(mkt.rf ~ smb + hml + rf,
+         data = factor.returns, 
+         subset= (date > 20000000))
 
 reg
 summary(reg)
@@ -88,7 +89,9 @@ summary(reg)
 #TASK 6
 #Run the regression separately for each individual year from 2000 to 2005
 for( y in 2000:2005) {
-  reg <- lm(factor.returns$mkt.rf ~ factor.returns$smb + factor.returns$hml + factor.returns$rf, 
-            data=filter(factor.returns, "date" > y*10000 & "date" <  y*10000 +10000))
+  reg <- lm(mkt.rf ~ smb + hml + rf,
+            data = factor.returns, 
+            subset= (date > y*10000 & date <  y*10000 +10000))
+  
   print(reg)
 }
