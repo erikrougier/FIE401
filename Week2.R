@@ -46,10 +46,11 @@ dat <- left_join(
   s_p500[ , c("Date", "Adj Close")], 
   by = "Date")
              
-#Plotting S&P and VIX side by side
+#Plotting S&P over VIX
 par(mar = c(5,5,2,5))
 
-#Assigning S&P-plot to p1 
+#Plotting VIX plot, leaving a spacing to the right for a second y-axis. 
+#Plotting VIX first S&P will be superimposed on the plot
 with(dat, plot(dat$Date, 
           dat$`VIX Close`, 
           main = "VIX over S&P 500",
@@ -60,7 +61,7 @@ with(dat, plot(dat$Date,
           ylim=c(0,3))
 
 
-#assigning VIX-plot to p2
+#Plotting S&P as a new object
 par(new=T)
 with(dat, plot(dat$Date, 
           dat$`Adj Close`, 
@@ -69,8 +70,10 @@ with(dat, plot(dat$Date,
           ylab = NA,
           type = "l", 
           col="blue"))
+#Adding the second y-axis on the side with text
 axis(side=4)
 mtext(side = 4, line = 3, "S&P500 level")
+#adding a legend without borders
 legend("topleft", inset = 0.05,
        legend = c("VIX", "S&P 500"),
        col=c("orange", "blue"), lty =1, box.lty = 0 )
