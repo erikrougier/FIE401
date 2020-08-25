@@ -29,7 +29,7 @@ library(lubridate)
 vix$Date <- as.Date(vix$Date, format = "%m/%d/%Y")
 
 #Downloadingd historical data from S&P500, for the same periode of time, 
-s_p500 <- fread ('https://query1.finance.yahoo.com/v7/finance/download/%5EGSPC?period1=1073001600&period2=1598227200&interval=1d&events=history')
+s_p500 <- fread ('https://query1.finance.yahoo.com/v7/finance/download/%5EGSPC?period1=1388620800&period2=1598313600&interval=1d&events=history')
 
 #Setting the date to r format
 s_p500$Date <- as.Date(s_p500$Date)
