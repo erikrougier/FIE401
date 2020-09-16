@@ -32,9 +32,46 @@ df$yyyymmdd <- as.Date(df$yyyymmdd, format="%Y%m%d")
 df$yyyy <- as.character(df$yyyy)
 df$yyyy <- format(as.Date(df$yyyy, format="%Y"),"%Y")
 
-
 #Winzorising at the 1% lvl to exclude extreme values in all the columns that are not binary
-for(i in c(3,8:11, 14:17)){df[,i] <- Winsorize(df[,i], probs=c(0.005, 0.995), na.rm = T)}
+for(i in c(3,8:11, 14:17)){
+  df[,i] <- Winsorize(df[,i],
+                      minval = NULL,
+                      maxval= NULL,
+                      probs=c(0.005, 0.995), 
+                      na.rm = T)
+}
+
+stargazer(
+  CAR_MA,df, type = "html",
+  out="Windsorize.html")
+
+#Effect of winsorizing compared to before
+plot(df$yyyymmdd, CAR_MA$deal_value)
+plot(df$yyyymmdd, df$deal_value)
+
+plot(df$yyyy, CAR_MA$carbidder)
+plot(df$yyyy, df$carbidder)
+
+plot(df$yyyy, CAR_MA$bidder_size)
+plot(df$yyyy, df$bidder_size)
+
+plot(df$yyyy, CAR_MA$sigma_bidder)
+plot(df$yyyy, df$sigma_bidder)
+
+plot(df$yyyy, CAR_MA$run_up_bidder)
+plot(df$yyyy, df$run_up_bidder)
+
+plot(df$yyyy, CAR_MA$relsize)
+plot(df$yyyy, df$relsize)
+
+plot(df$yyyy, CAR_MA$bidder_mtb)
+plot(df$yyyy, df$bidder_mtb)
+
+plot(df$yyyy, CAR_MA$bidder_fcf)
+plot(df$yyyy, df$bidder_fcf)
+
+plot(df$yyyy, CAR_MA$bidder_lev)
+plot(df$yyyy, df$bidder_lev)
 
 #Creates table for yearly mean
 aggregate(df[, c(3, 5, 7:8)], list(df$yyyy), mean)
