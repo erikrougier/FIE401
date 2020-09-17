@@ -32,10 +32,10 @@ df$yyyy <- as.character(df$yyyy)
 df$yyyy <- format(as.Date(df$yyyy, format="%Y"),"%Y")
 
 #After investigating the data sourious outliers are detected
-#Winzorising at the 1% lvl to reduce the effect of outliers. 
+#Winzorising at the 5% lvl to reduce the effect of outliers. 
 for(i in c(3,8:11, 14:17)){
   df[,i] <- Winsorize(df[,i], 
-                      probs=c(0.005, 0.995), 
+                      probs=c(0.025, 0.975), 
                       na.rm = T)
 }
 
