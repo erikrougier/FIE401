@@ -17,10 +17,10 @@ library(formattable)
 #Set working directory
 setwd("/Users/adhog/OneDrive/Dokumenter/Fie401")
 
-#Load the data file
+#Load the data file, which is in R format
 load("CAR_M&A.RData")
 
-#Rename the data for easier references
+#Rename the data for easier references, short for data frame
 df <- CAR_MA
 
 
@@ -31,13 +31,49 @@ df$yyyymmdd <- as.Date(df$yyyymmdd, format="%Y%m%d")
 df$yyyy <- as.character(df$yyyy)
 df$yyyy <- format(as.Date(df$yyyy, format="%Y"),"%Y")
 
+#After investigating the data sourious outliers are detected
+#Winzorising at the 1% lvl to reduce the effect of outliers. 
+for(i in c(3,8:11, 14:17)){
+  df[,i] <- Winsorize(df[,i], 
+                      probs=c(0.005, 0.995), 
+                      na.rm = T)
+}
 
-#Winzorising at the 1% lvl to exclude extreme values in all the columns that 
-#are not binary
-for(i in c(3,8:11, 14:17)){df[,i] <- Winsorize(df[,i], probs=c(0.025, 0.975), 
-                                               na.rm = T)}
+#Create a Stargazer of pre and post Windsorizing to illustrate the effect.
+#Note that the date columns are not included in "df" as they are charchters and not numerics.
+stargazer(CAR_MA, df, 
+          type = "html",
+          out="Windsorize.html")
 
-#Creates table for yearly mean
+#Effect of Winsorizing, plotting pre and post Winsorizing, illustrated on all winsorized coumns
+plot(df$yyyymmdd, CAR_MA$deal_value)
+plot(df$yyyymmdd, df$deal_value)
+
+plot(df$yyyy, CAR_MA$carbidder)
+plot(df$yyyy, df$carbidder)
+
+plot(df$yyyy, CAR_MA$bidder_size)
+plot(df$yyyy, df$bidder_size)
+
+plot(df$yyyy, CAR_MA$sigma_bidder)
+plot(df$yyyy, df$sigma_bidder)
+
+plot(df$yyyy, CAR_MA$run_up_bidder)
+plot(df$yyyy, df$run_up_bidder)
+
+plot(df$yyyy, CAR_MA$relsize)
+plot(df$yyyy, df$relsize)
+
+plot(df$yyyy, CAR_MA$bidder_mtb)
+plot(df$yyyy, df$bidder_mtb)
+
+plot(df$yyyy, CAR_MA$bidder_fcf)
+plot(df$yyyy, df$bidder_fcf)
+
+plot(df$yyyy, CAR_MA$bidder_lev)
+plot(df$yyyy, df$bidder_lev)
+
+#Create table for yearly mean
 df2 <- aggregate(df[, c(3, 5, 7:8)], list(df$yyyy), mean)
 
 #Rename the collumns in the table
